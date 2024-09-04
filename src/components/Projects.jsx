@@ -10,9 +10,9 @@ const RepoList = () => {
             try {
                 const headers = {
                     
-                    Authorization: `token ${gitToken}`,
+                    Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
                 };
-
+                
                 const response = await fetch('https://api.github.com/users/DiamondStalker/repos', { headers });
                 const data = await response.json();
 
@@ -52,7 +52,7 @@ const RepoList = () => {
     }
 
     return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
+        <div id='Proyects' style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
             {repos.map((repo) => (
                 <div key={repo.id} style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '10px', width: '250px' }}>
                     <h3>{repo.name}</h3>

@@ -60,7 +60,8 @@ const Home = () => {
                                                 //style={{ whiteSpace: 'pre-line', fontSize: '2em' }}
                                             />
                                         </h1>
-                                        <h3>I am passionate about programming and video games.</h3>
+                                        <h3>I am a professional with solid experience in automation and unit testing using JUnit, Selenium, Puppeteer and Playwright. I have extensive knowledge in programming languages such as Java, React, Node, PHP, C#, .NET, Python, JavaScript and more. In addition, I have led graphic design projects and managed communities as a Community Manager for over a year, developing effective communication and management skills. I am dedicated and passionate, always looking to learn and experience innovative solutions, contributing to the success and growth of any team or project.
+</h3>
                                     </div>
                                 }
                             </TrackVisibility>
