@@ -1,0 +1,55 @@
+.typing {
+    overflow: hidden;
+    border-right: 0.15em solid orange;
+    /* Línea de escritura simulada */
+    white-space: nowrap;
+    /* Evitar el salto de línea */
+    margin: 0 auto;
+    /* Centrar el texto */
+    letter-spacing: 0.15em;
+    /* Espacio entre letras */
+    animation: typing 3000ms steps(20, end), blink-caret 0.75s step-end infinite;
+}
+
+.deleting {
+    animation: deleting 3000ms steps(80, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes deleting {
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0;
+    }
+}
+
+@keyframes blink-caret {
+
+    from,
+    to {
+        border-color: transparent;
+    }
+
+    50% {
+        border-color: orange;
+    }
+}
+
+.current-text {
+    display: inline-block;
+    color: orange;
+    /* Color del texto que se está escribiendo */
+}
+
