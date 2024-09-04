@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
+import {gitToken} from '../../config.json'
 
 const RepoList = () => {
     const [repos, setRepos] = useState([]);
@@ -7,10 +8,9 @@ const RepoList = () => {
     useEffect(() => {
         const fetchRepos = async () => {
             try {
-                const token = '';
                 const headers = {
-
-                    Authorization: `token ${token}`,
+                    
+                    Authorization: `token ${gitToken}`,
                 };
 
                 const response = await fetch('https://api.github.com/users/DiamondStalker/repos', { headers });
