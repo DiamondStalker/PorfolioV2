@@ -209,13 +209,13 @@ p.danger {
 }
 
 .skill-slider {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
   position: relative;
 }
 
 .skill-slider .item {
-  width: 50%;
+  width:50%;
   margin: 0 auto 15px auto;
 }
 
@@ -231,7 +231,7 @@ p.danger {
 .project {
   padding: 80px 0;
   position: relative;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .project h2 {

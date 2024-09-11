@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './components/Home';
 import GitHubRepos from './components/Projects';
 import Skills from './components/Skills'
-//import Cars from './components/Cards'
+import Test from './components/Test'
 import './css/App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -16,6 +16,7 @@ const App = () => {
       <Home />
       <Skills/>
       <GitHubRepos />
+      <Test />
     </div>
   )
 }
