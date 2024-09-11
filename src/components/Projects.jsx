@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import {gitToken} from '../../config.json'
 
 const RepoList = () => {
     const [repos, setRepos] = useState([]);
@@ -22,10 +21,10 @@ const RepoList = () => {
                 // Obtener lenguajes y eventos para cada repositorio
                 const reposWithDetails = await Promise.all(
                     sortedRepos.map(async (repo) => {
-                        const languagesResponse = await fetch(repo.languages_url);
+                        const languagesResponse = await fetch(repo.languages_url, { headers });
                         const languagesData = await languagesResponse.json();
 
-                        const eventsResponse = await fetch(repo.events_url);
+                        const eventsResponse = await fetch(repo.events_url, { headers });
                         const eventsData = await eventsResponse.json();
 
                         return {
