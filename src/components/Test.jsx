@@ -1,13 +1,9 @@
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { Card } from "./Cards";
 import { useEffect, useState } from 'react'
-
-import projImg1 from "../assets/img/project-img1.png";
-import projImg2 from "../assets/img/project-img2.png";
-import projImg3 from "../assets/img/project-img3.png";
-import colorSharp2 from "../assets/img/color-sharp2.png";
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
+import Loading from './Loading'
 
 export const Projects = () => {
 
@@ -26,7 +22,9 @@ export const Projects = () => {
                 const data = await response.json();
 
                 // Ordenar los repositorios por fecha de actualización (de más reciente a más antiguo)
-                const sortedRepos = data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)).slice(0, 14);
+                const sortedRepos = data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+                    .filter(x => { return (!/(DiamondStalker|porfolio|Carlos_Mateo|readme|Portfolio)/gmi.test(x.name)) })
+                    .slice(0, 15);
 
                 // Obtener lenguajes y eventos para cada repositorio
                 const reposWithDetails = await Promise.all(
@@ -56,6 +54,16 @@ export const Projects = () => {
         fetchRepos();
     }, []);
 
+
+    if (loading) {
+        return (
+            <center>
+                <Loading />
+            </center>
+        );
+    }
+
+
     return (
         <section className="project" id="projects">
             <Container>
@@ -69,10 +77,10 @@ export const Projects = () => {
                                     <Tab.Container id="projects-tabs" defaultActiveKey="first">
                                         <Nav variant="pills" className="nav-pills mb-5 justify-content-center align-items-center" id="pills-tab">
                                             <Nav.Item>
-                                                <Nav.Link eventKey="first">Tab 1</Nav.Link>
+                                                <Nav.Link eventKey="first">Repository</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="second">Tab 2</Nav.Link>
+                                                <Nav.Link eventKey="second">Gits</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
                                                 <Nav.Link eventKey="third">Tab 3</Nav.Link>
@@ -83,22 +91,16 @@ export const Projects = () => {
                                                 <center>
                                                     <Row>
                                                         <div id='Proyects' style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-                                                            {repos.map((repo) => (
-                                                                <div key={repo.id} style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '10px', width: '250px' }}>
-                                                                    <h3>{repo.name}</h3>
-                                                                    <p>{repo.description}</p>
-                                                                    <p>Last updated: {new Date(repo.updated_at).toLocaleDateString()}</p>
-                                                                    <p>Languages: {repo.languages.join(', ') || 'No languages detected'}</p>
-                                                                    <p>Events: {repo.eventsCount}</p>
-                                                                    <p>Watchers: {repo.watchers_count}</p>
-                                                                    <p>Forks: {repo.forks_count}</p>
-                                                                    <center>
-                                                                        <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-                                                                            View Repository
-                                                                        </a>
-                                                                    </center>
-                                                                </div>
-                                                            ))}
+                                                            {
+                                                                repos.map((project, index) => {
+                                                                    return (
+                                                                        <Card
+                                                                            key={index}
+                                                                            {...project}
+                                                                        />
+                                                                    )
+                                                                })
+                                                            }
                                                         </div>
                                                     </Row>
                                                 </center>

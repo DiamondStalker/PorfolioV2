@@ -147,3 +147,10 @@ button:focus-visible {
   letter-spacing: 0.5px;
   margin-top: 20px;
 }
+
+/*** View Repo***/
+
+.buttonStyles a{
+  font-family: 'Fira Code';
+  color: white;
+}

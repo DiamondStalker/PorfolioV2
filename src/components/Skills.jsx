@@ -1,7 +1,8 @@
-"use client"
-
 import { buildStyles, CircularProgressbarWithChildren } from 'react-circular-progressbar'
 import { Code2, Database, FileJson, Laptop, PenTool, Terminal } from 'lucide-react'
+import { Bot, Cloud, Wrench } from 'lucide-react';
+
+
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 
@@ -29,12 +30,34 @@ const SkillBar = ({ skill, percentage, icon: Icon }) => (
 )
 
 const skills = [
-    { name: 'React', proficiency: 90, icon: FileJson },
+
+    { name: 'Git', proficiency: 90, icon: Wrench },
+
+    { name: 'Puppeteer', proficiency: 100, icon: Bot },
+    { name: 'Playwright', proficiency: 100, icon: Bot },
+
     { name: 'JavaScript', proficiency: 100, icon: Code2 },
-    { name: 'CSS', proficiency: 80, icon: PenTool },
-    { name: 'Node.js', proficiency: 75, icon: Terminal },
+    { name: 'Node.js', proficiency: 100, icon: Terminal },
+    { name: 'React', proficiency: 90, icon: FileJson },
+    { name: 'Java', proficiency: 70, icon: FileJson },
+    { name: 'React', proficiency: 90, icon: FileJson },
+    { name: 'C++', proficiency: 70, icon: FileJson },
+    { name: 'Cobol', proficiency: 60, icon: Code2 },
     { name: 'Python', proficiency: 70, icon: Laptop },
-    { name: 'SQL', proficiency: 65, icon: Database },
+    { name: 'Vite', proficiency: 65, icon: Database },
+    { name: 'Flutter', proficiency: 65, icon: Database },
+
+
+    { name: 'CSS', proficiency: 80, icon: PenTool },
+
+    { name: 'SQL', proficiency: 90, icon: Database },
+    { name: 'AWS', proficiency: 50, icon: Cloud },
+    { name: 'AS400', proficiency: 50, icon: Database },
+    { name: 'MongoDB', proficiency: 90, icon: Cloud },
+    { name: 'Firebase', proficiency: 90, icon: Cloud },
+
+    
+
 ]
 
 const responsive = {
