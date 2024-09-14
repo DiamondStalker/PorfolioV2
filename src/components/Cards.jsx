@@ -9,7 +9,21 @@ export const Card = ({ id, name, description, updated_at, languages, eventsCount
 
     return (
 
-        <div key={id} style={{ background: '#12121283', border: '1px solid #ccc', padding: '20px', borderRadius: '10px', width: '250px' }}>
+        <div key={id} style={{
+            background: '#12121283',
+            border: '1px solid #ccc',
+            borderRadius: '10px',
+            width: '250px',
+            display: 'flex',
+            flexDirection: 'column'
+        }}
+            className="bg-card border border-border rounded-lg w-64 flex flex-col overflow-hidden"
+        >
+
+            <div className="bg-muted px-4 py-2 text-sm text-muted-foreground border-b border-border">
+                Last updated: {new Date(updated_at).toLocaleDateString()}
+            </div>
+
             <h3>{name.replaceAll('_', '-')}</h3>
             <p className='Language'>{languages.length > 0 ? (
                 languages.map((temp) => {
@@ -31,22 +45,28 @@ export const Card = ({ id, name, description, updated_at, languages, eventsCount
             ) : 'No languages detected'}</p>
 
             <p>{description}</p>
-            <p>Last updated: {new Date(updated_at).toLocaleDateString()}</p>
 
-            <div style={iconContainerStyles}>
-                <p className='Pull'><GitPullRequest /> {eventsCount}</p>
-                <p className='view' ><Eye /> {watchers_count}</p>
-                <p className='Fork'><GitFork />{forks_count}</p>
-            </div>
+            <center style={{ marginTop: 'auto' }}>
+                <div style={iconContainerStyles} >
+                    <p className='Pull'><GitPullRequest /> {eventsCount}</p>
+                    <p className='view' ><Eye /> {watchers_count}</p>
+                    <p className='Fork'><GitFork />{forks_count}</p>
+                </div>
 
-            <div className="buttonStyles">
-                <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                    <a href={html_url} target="_blank" rel="noopener noreferrer" >
-                        View Repository
-                    </a>
-                </button>
+                <div className="buttonStyles"
+                    style={{
+                        width: "95%",
+                        marginLeft: "2.5%",
+                    }}>
+                    <button
+                        type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        <a href={html_url} target="_blank" rel="noopener noreferrer" >
+                            View Repository
+                        </a>
+                    </button>
 
-            </div>
+                </div>
+            </center>
 
 
 
@@ -58,7 +78,7 @@ const iconContainerStyles = {
     display: 'flex',
     justifyContent: 'space-around', // Espacio uniforme entre los elementos
     alignItems: 'center', // Alinea verticalmente los íconos
-    marginTop: '10px',
+    marginLeft: '10%'
 };
 
 export default Card;

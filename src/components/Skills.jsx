@@ -88,7 +88,7 @@ export default function Skills() {
                     <div className='col-12'>
                         <div className='skill-bx wow zoomIn'>
                             <h2>Skills</h2>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam labore in alias quos error eos aperiam. Quam, ullam? At maxime fugiat eum placeat eius? Eligendi dolores quia magnam beatae repellat!</p>
+                            <p>Throughout my experience as a developer, I have acquired and refined various skills that allow me to tackle complex challenges with efficient solutions. Some of my key competencies include:</p>
                             <Carousel responsive={responsive} infinite={true} className="owl-carousel owl-theme skill-slider">
                                 {skills.map((skill) => (
                                     <SkillBar key={skill.name} skill={skill.name} percentage={skill.proficiency} icon={skill.icon} />
