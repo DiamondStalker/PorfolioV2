@@ -1,7 +1,7 @@
 /************ Custom Font ************/
 @font-face {
   font-family: Centra;
-  src: url('./assets/font/CentraNo2-Bold.ttf');
+  src: url('./assets/font/CentraNo2-bold.ttf');
   font-weight: 700;
 }
 
@@ -30,7 +30,7 @@ html {
 }
 
 body {
-  background-image: url("../assets/Default_Create_a_captivating_galaxy_background_image_for_a_web_3_a735a625-63c1-4cfd-988b-fbfa5825faba_1.jpg");
+  background-image: url("../assets/Galaxy1.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
