@@ -109,7 +109,7 @@ p.danger {
 .banner {
   margin-top: 0;
   padding: 260px 0 100px 0;
-  background-image: url('./assets/img/banner-bg.png');
+  background-image: url('./assets/Galaxy1.jpg');
   background-position: top center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -462,7 +462,7 @@ p.danger {
 /************ Footer Css ************/
 .footer {
   padding: 0 0 50px 0;
-  background-image: url('./assets/img/footer-bg.png');
+  background-image: url('./assets/Galaxy1.jpg');
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;

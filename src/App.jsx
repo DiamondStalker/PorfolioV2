@@ -5,7 +5,7 @@ import Home from './components/Home';
 import Skills from './components/Skills'
 import Test from './components/Test'
 
-import './app.css'
+import './css/app.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 

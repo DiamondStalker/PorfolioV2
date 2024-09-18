@@ -1,10 +1,11 @@
 import { Container, Row, Col, Tab, Nav } from "react-bootstrap";
 import { Card } from "./Cards";
 import { Gists } from './Gits';
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 import 'animate.css';
 import TrackVisibility from 'react-on-screen';
-import Loading from './Loading'
+import Loading from './Loading';
+import { gitToken } from '/config.json';
 
 export const Projects = () => {
 
@@ -16,12 +17,13 @@ export const Projects = () => {
     useEffect(() => {
         const fetchRepos = async () => {
             try {
+                console.log(gitToken);
                 // const headers = {
-                //     Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
+                //     Authorization: `token ${JSON.parse(decodeURIComponent(escape(window.atob(gitToken)))).gitToken}`,
                 // };
 
                 const response = await fetch('https://api.github.com/users/DiamondStalker/repos',
-                    // { headers }
+                    //{ headers }
                 );
                 const data = await response.json();
 
@@ -33,12 +35,12 @@ export const Projects = () => {
                 // Obtener lenguajes y eventos para cada repositorio
                 const reposWithDetails = await Promise.all(
                     sortedRepos.map(async (repo) => {
-                        const languagesResponse = await fetch(repo.languages_url, 
+                        const languagesResponse = await fetch(repo.languages_url,
                             //{ headers }
                         );
                         const languagesData = await languagesResponse.json();
 
-                        const eventsResponse = await fetch(repo.events_url, 
+                        const eventsResponse = await fetch(repo.events_url,
                             //{ headers }
                         );
                         const eventsData = await eventsResponse.json();
@@ -54,6 +56,7 @@ export const Projects = () => {
                 setRepos(reposWithDetails);
             } catch (error) {
                 console.error('Error fetching the repositories:', error);
+                setRepos([]);
             } finally {
                 setLoadingRepos(false);
             }
@@ -61,12 +64,12 @@ export const Projects = () => {
 
         const gists = async () => {
             try {
-                const headers = {
-                    Authorization: `token ${import.meta.env.VITE_TOKEN}`,
-                };
+                // const headers = {
+                //     Authorization: `token ${import.meta.env.VITE_TOKEN}`,
+                // };
 
                 const response = await fetch('https://api.github.com/users/DiamondStalker/gists',
-                    { headers }
+                    //{ headers }
                 );
                 const data = await response.json();
 
