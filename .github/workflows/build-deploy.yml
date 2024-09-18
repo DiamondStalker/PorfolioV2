@@ -16,6 +16,9 @@ jobs:
       - name: Install & build
         run: npm i && npm run build
 
+      - name: Token
+        run: echo "GH_TOKEN${{ secrets.GH_TOKEN}}"
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
