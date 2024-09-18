@@ -7,12 +7,14 @@ const RepoList = () => {
     useEffect(() => {
         const fetchRepos = async () => {
             try {
-                const headers = {
+                // const headers = {
                     
-                    Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
-                };
+                //     Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
+                // };
                 
-                const response = await fetch('https://api.github.com/users/DiamondStalker/repos', { headers });
+                const response = await fetch('https://api.github.com/users/DiamondStalker/repos', 
+                   // { headers }
+                );
                 const data = await response.json();
 
                 // Ordenar los repositorios por fecha de actualización (de más reciente a más antiguo)

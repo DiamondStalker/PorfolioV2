@@ -16,11 +16,13 @@ export const Projects = () => {
     useEffect(() => {
         const fetchRepos = async () => {
             try {
-                const headers = {
-                    Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
-                };
+                // const headers = {
+                //     Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
+                // };
 
-                const response = await fetch('https://api.github.com/users/DiamondStalker/repos', { headers });
+                const response = await fetch('https://api.github.com/users/DiamondStalker/repos',
+                    // { headers }
+                );
                 const data = await response.json();
 
                 // Ordenar los repositorios por fecha de actualización (de más reciente a más antiguo)
@@ -56,10 +58,12 @@ export const Projects = () => {
         const gists = async () => {
             try {
                 const headers = {
-                    Authorization: `token ${import.meta.env.VITE_GIT_TOKEN}`,
+                    Authorization: `token ${env.VITE_TOKEN}`,
                 };
 
-                const response = await fetch('https://api.github.com/users/DiamondStalker/gists', { headers });
+                const response = await fetch('https://api.github.com/users/DiamondStalker/gists',
+                    { headers }
+                );
                 const data = await response.json();
 
                 setGits(data);
