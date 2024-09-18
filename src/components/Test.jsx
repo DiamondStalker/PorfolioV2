@@ -33,10 +33,14 @@ export const Projects = () => {
                 // Obtener lenguajes y eventos para cada repositorio
                 const reposWithDetails = await Promise.all(
                     sortedRepos.map(async (repo) => {
-                        const languagesResponse = await fetch(repo.languages_url, { headers });
+                        const languagesResponse = await fetch(repo.languages_url, 
+                            //{ headers }
+                        );
                         const languagesData = await languagesResponse.json();
 
-                        const eventsResponse = await fetch(repo.events_url, { headers });
+                        const eventsResponse = await fetch(repo.events_url, 
+                            //{ headers }
+                        );
                         const eventsData = await eventsResponse.json();
 
                         return {
@@ -58,7 +62,7 @@ export const Projects = () => {
         const gists = async () => {
             try {
                 const headers = {
-                    Authorization: `token ${env.VITE_TOKEN}`,
+                    Authorization: `token ${import.meta.env.VITE_TOKEN}`,
                 };
 
                 const response = await fetch('https://api.github.com/users/DiamondStalker/gists',
