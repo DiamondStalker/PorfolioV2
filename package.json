@@ -1,8 +1,9 @@
 {
   "name": "porfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "homepage": "https://DiamondStalker.github.io",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -41,6 +42,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.11",
     "vite": "^4.3.9"
