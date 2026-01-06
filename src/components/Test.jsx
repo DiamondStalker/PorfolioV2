@@ -17,11 +17,7 @@ export const Projects = () => {
     useEffect(() => {
         const fetchRepos = async () => {
             try {
-                console.log(gitToken);
-                // const headers = {
-                //     Authorization: `token ${JSON.parse(decodeURIComponent(escape(window.atob(gitToken)))).gitToken}`,
-                // };
-
+            
                 const response = await fetch('https://api.github.com/users/DiamondStalker/repos',
                     //{ headers }
                 );
