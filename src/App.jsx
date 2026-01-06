@@ -2,8 +2,8 @@
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 // import GitHubRepos from './components/Projects';
-import Skills from './components/Skills'
-import Test from './components/Test'
+import Skills from './components/SkillsActualizado'
+import Test from './components/Proyecto'
 
 import './css/app.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
