@@ -18,8 +18,7 @@ jobs:
         run: |
           echo "=== SECRETS (masked) ==="
           echo "GH_TOKEN: ${{ secrets.GH_TOKEN }}"
-          echo "RENDER_API_URL: ${{ secrets.RENDER_API_URL }}"
-          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+          echo "RENDER_API_URL: ${{ vars.RENDER_API_URL }}"
           echo ""
           echo "=== ENVIRONMENT VARIABLES ==="
           echo "RENDER_API_URL: $RENDER_API_URL"
@@ -27,12 +26,12 @@ jobs:
           echo ""
         env:
           RENDER_API_URL: ${{ secrets.RENDER_API_URL }}
-          VITE_API_BASE_URL: ${{ secrets.RENDER_API_URL }}/api
+          VITE_API_BASE_URL: ${{ vars.RENDER_API_URL }}/api
         
       - name: Install & build
         run: npm i && npm run build
         env:
-          VITE_API_BASE_URL: ${{ secrets.RENDER_API_URL }}/api
+          VITE_API_BASE_URL: ${{ vars.RENDER_API_URL }}/api
         
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
