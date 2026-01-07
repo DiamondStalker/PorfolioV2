@@ -1,48 +1,41 @@
-name: Deploy to GitHub Pages
+name: React App Github Deploy
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - "main"
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    environment: github-pages
-    
     steps:
-    - name: Checkout 🛎️
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js 📦
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-
-    - name: Install dependencies 🔧
-      run: npm ci
-
-    - name: Debug vars/secrets presence ✨
-      run: |
-        echo "Test present? => ${{ vars.Test != '' }}"
-        echo "RENDER_API_URL present? => ${{ vars.RENDER_API_URL != '' }}"
-        echo "GH_TOKEN present? => ${{ secrets.GH_TOKEN != '' }}"
-        echo "GITHUB_TOKEN present? => ${{ secrets.GITHUB_TOKEN != '' }}"
-
-      
-    - name: Build for production 🏗️
-      run: npm run build
-      env:
-        # URL de la API desplegada en Render
-        VITE_API_BASE_URL: ${{ secrets.RENDER_API_URL }}
-        VITE_APP_ENVIRONMENT: production
-        VITE_GITHUB_USER: DiamondStalker
-
-    - name: Deploy to GitHub Pages 🚀
-      uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
-      with:
-        github_token: ${{ secrets.GH_TOKEN }}
-        publish_dir: ./dist
+      - name: Debug - Print all variables
+        run: |
+          echo "=== SECRETS (masked) ==="
+          echo "GH_TOKEN: ${{ secrets.GH_TOKEN }}"
+          echo "RENDER_API_URL: ${{ secrets.RENDER_API_URL }}"
+          echo "GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}"
+          echo ""
+          echo "=== ENVIRONMENT VARIABLES ==="
+          echo "RENDER_API_URL: $RENDER_API_URL"
+          echo "VITE_API_BASE_URL: $VITE_API_BASE_URL"
+          echo ""
+        env:
+          RENDER_API_URL: ${{ secrets.RENDER_API_URL }}
+          VITE_API_BASE_URL: ${{ secrets.RENDER_API_URL }}/api
+        
+      - name: Install & build
+        run: npm i && npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.RENDER_API_URL }}/api
+        
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@4.1.1
+        with:
+          branch: gh-pages
+          folder: dist
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
