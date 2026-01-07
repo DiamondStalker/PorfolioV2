@@ -24,7 +24,10 @@ jobs:
       run: npm ci
 
     - name: Information Enviroment ✨
-      run: echo "Enviroments \n Secrets ${{secrets.RENDER_API_URL}} || Enviroment ${{ vars.RENDER_API_URL }}"
+      run: |
+        echo "VAR1=${{ vars.Test }}"
+        echo "VAR2=${{ vars.RENDER_API_URL }}"
+        echo "VAR2=${{ secrets.GH_TOKEN }}"
       
     - name: Build for production 🏗️
       run: npm run build
