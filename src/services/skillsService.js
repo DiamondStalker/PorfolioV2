@@ -5,7 +5,7 @@
 
 class SkillsService {
     constructor() {
-        this.baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+        this.baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
         this.cache = new Map();
         this.cacheExpiry = 5 * 60 * 1000; // 5 minutos
         
@@ -27,7 +27,7 @@ class SkillsService {
                 return cachedData;
             }
 
-            const response = await fetch(`${this.baseUrl}/skills`, {
+            const response = await fetch(`${this.baseUrl}/api/skills`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ class SkillsService {
                 return cachedData;
             }
 
-            const response = await fetch(`${this.baseUrl}/skills/category/${category}`, {
+            const response = await fetch(`${this.baseUrl}api/skills/category/${category}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

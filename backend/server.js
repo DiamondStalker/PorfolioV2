@@ -11,14 +11,14 @@ import Skill from './models/Skill.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000; // Render usa puerto 10000 por defecto
 
 // Middleware de seguridad
 app.use(helmet({
     crossOriginEmbedderPolicy: false
 }));
 
-// Configuración CORS
+// Configuración CORS - ACTUALIZADA PARA RENDER
 app.use(cors({
     origin: [
         process.env.FRONTEND_URL,
@@ -61,6 +61,9 @@ app.get('/health', async (req, res) => {
             success: true,
             message: 'API funcionando correctamente',
             database: 'Conectado a MongoDB Atlas',
+            environment: process.env.NODE_ENV || 'development',
+            platform: 'Render',
+            port: PORT,
             timestamp: new Date().toISOString()
         });
     } catch (error) {
@@ -72,13 +75,24 @@ app.get('/health', async (req, res) => {
     }
 });
 
-// RUTAS DE SKILLS
+// Root endpoint
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Portfolio Backend API v1.0.0',
+        status: 'Running on Render',
+        endpoints: {
+            health: '/health',
+            skills: '/api/skills',
+            api: '/api'
+        }
+    });
+});
 
 // GET /api/skills - Obtener todas las skills
 app.get('/api/skills', async (req, res) => {
     try {
         const { category, sort = 'proficiency', order = 'desc' } = req.query;
-
+        
         let filter = { isActive: true };
         if (category) {
             filter.category = category.toLowerCase();
@@ -113,17 +127,17 @@ app.get('/api/skills', async (req, res) => {
     }
 });
 
-// GET /api/skills/category/:category - Obtener skills por categoría
+// GET /api/skills/category/:category
 app.get('/api/skills/category/:category', async (req, res) => {
     try {
         const { category } = req.params;
-
-        const skills = await Skill.find({
-            category: category.toLowerCase(),
-            isActive: true
+        
+        const skills = await Skill.find({ 
+            category: category.toLowerCase(), 
+            isActive: true 
         })
-            .sort({ proficiency: -1, priority: -1 })
-            .select('-__v');
+        .sort({ proficiency: -1, priority: -1 })
+        .select('-__v');
 
         res.json({
             success: true,
@@ -145,179 +159,17 @@ app.get('/api/skills/category/:category', async (req, res) => {
     }
 });
 
-// GET /api/skills/stats - Obtener estadísticas
-app.get('/api/skills/stats', async (req, res) => {
-    try {
-        const totalSkills = await Skill.countDocuments({ isActive: true });
-
-        const avgResult = await Skill.aggregate([
-            { $match: { isActive: true } },
-            { $group: { _id: null, avgProficiency: { $avg: '$proficiency' } } }
-        ]);
-
-        const categoryStats = await Skill.aggregate([
-            { $match: { isActive: true } },
-            {
-                $group: {
-                    _id: '$category',
-                    count: { $sum: 1 },
-                    avgProficiency: { $avg: '$proficiency' },
-                    maxProficiency: { $max: '$proficiency' }
-                }
-            },
-            { $sort: { count: -1 } }
-        ]);
-
-        res.json({
-            success: true,
-            data: {
-                totalSkills,
-                averageProficiency: avgResult[0]?.avgProficiency || 0,
-                categoriesStats: categoryStats
-            }
-        });
-
-    } catch (error) {
-        console.error('Error obteniendo estadísticas:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error obteniendo estadísticas',
-            error: error.message
-        });
-    }
-});
-
-// POST /api/skills - Crear nueva skill
-app.post('/api/skills', async (req, res) => {
-    try {
-        const skillData = req.body;
-
-        const escapeRegex = (text = '') =>
-            text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-        const normalizedName = (skillData.name || '').trim();
-
-
-        // Verificar si ya existe
-        const existingSkill = await Skill.findOne({
-            name: { $regex: new RegExp(`^${escapeRegex(normalizedName)}$`, 'i') }
-        });
-
-        if (existingSkill) {
-            return res.status(409).json({
-                success: false,
-                statusCode: 409,
-                message: 'Ya existe una skill con ese nombre'
-            });
-        }
-
-        const skill = new Skill(skillData);
-        await skill.save();
-
-        res.status(201).json({
-            success: true,
-            statusCode: 201,
-            message: 'Skill creada exitosamente',
-            data: { skill }
-        });
-
-    } catch (error) {
-        console.error('Error creando skill:', error);
-        res.status(400).json({
-            success: false,
-            statusCode: 400,
-            message: 'Error creando skill',
-            error: error.message
-        });
-    }
-});
-
-// PUT /api/skills/:id - Actualizar skill
-app.put('/api/skills/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-        const updateData = req.body;
-
-        const skill = await Skill.findByIdAndUpdate(
-            id,
-            updateData,
-            { new: true, runValidators: true }
-        );
-
-        if (!skill) {
-            return res.status(404).json({
-                success: false,
-                statusCode: 404,
-                message: 'Skill no encontrada'
-            });
-        }
-
-        res.json({
-            success: true,
-            statusCode: 200,
-            message: 'Skill actualizada exitosamente',
-            data: { skill }
-        });
-
-    } catch (error) {
-        console.error('Error actualizando skill:', error);
-        res.status(400).json({
-            success: false,
-            statusCode: 400,
-            message: 'Error actualizando skill',
-            error: error.message
-        });
-    }
-});
-
-// DELETE /api/skills/:id - Eliminar skill
-app.delete('/api/skills/:id', async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const skill = await Skill.findByIdAndUpdate(
-            id,
-            { isActive: false },
-            { new: true }
-        );
-
-        if (!skill) {
-            return res.status(404).json({
-                success: false,
-                statusCode: 404,
-                message: 'Skill no encontrada'
-            });
-        }
-
-        res.json({
-            success: true,
-            statusCode: 200,
-            message: 'Skill eliminada exitosamente',
-            data: { skill }
-        });
-
-    } catch (error) {
-        console.error('Error eliminando skill:', error);
-        res.status(400).json({
-            success: false,
-            statusCode: 400,
-            message: 'Error eliminando skill',
-            error: error.message
-        });
-    }
-});
-
 // Ruta de información de API
 app.get('/api', (req, res) => {
     res.json({
         success: true,
-        message: 'Portfolio API v1.0.0',
+        message: 'Portfolio API v1.0.0 - Running on Render',
         endpoints: {
             skills: '/api/skills',
             skillsByCategory: '/api/skills/category/:category',
-            stats: '/api/skills/stats',
             health: '/health'
-        }
+        },
+        platform: 'Render'
     });
 });
 
@@ -334,11 +186,12 @@ app.use('*', (req, res) => {
 async function startServer() {
     try {
         await connectDB();
-
-        app.listen(PORT, () => {
-            console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
+        
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`🎨 Servidor Render corriendo en puerto ${PORT}`);
             console.log(`📋 Health check: http://localhost:${PORT}/health`);
             console.log(`🎯 API Skills: http://localhost:${PORT}/api/skills`);
+            console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
         });
     } catch (error) {
         console.error('❌ Error iniciando servidor:', error);
