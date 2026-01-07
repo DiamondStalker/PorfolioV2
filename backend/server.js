@@ -11,27 +11,65 @@ import Skill from './models/Skill.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 10000; // Render usa puerto 10000 por defecto
+const PORT = process.env.PORT || 10000;
 
 // Middleware de seguridad
 app.use(helmet({
     crossOriginEmbedderPolicy: false
 }));
 
-// Configuración CORS - ACTUALIZADA PARA RENDER
+// Configuración CORS - CON DEBUG INCLUIDO
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://diamondstalker.github.io',
+    'https://*.github.io',
+    'https://*.onrender.com',
+    /https:\/\/.*\.onrender\.com$/
+];
+
+// Logs de configuración CORS
+console.log('🌐 CORS Configuration:');
+console.log('📋 Allowed Origins:', allowedOrigins);
+console.log('🔗 FRONTEND_URL:', process.env.FRONTEND_URL);
+
 app.use(cors({
-    origin: [
-        process.env.FRONTEND_URL,
-        'http://localhost:5173',
-        'http://localhost:3000'
-    ],
+    origin: allowedOrigins,
     credentials: true
 }));
 
+// Middleware debug para CORS
+app.use((req, res, next) => {
+    // Solo loggear requests importantes
+    if (req.method === 'OPTIONS' || req.path.includes('/api/')) {
+        console.log('🌐 CORS Request:');
+        console.log('  📡 Origin:', req.headers.origin || 'No origin header');
+        console.log('  🎯 Method:', req.method);
+        console.log('  📍 Path:', req.path);
+        console.log('  🔑 User-Agent:', req.headers['user-agent']?.substring(0, 50) + '...');
+        
+        // Verificar si el origin está permitido
+        const isAllowed = allowedOrigins.some(allowed => {
+            if (typeof allowed === 'string') {
+                return allowed === req.headers.origin;
+            }
+            if (allowed instanceof RegExp) {
+                return allowed.test(req.headers.origin || '');
+            }
+            return false;
+        });
+        
+        console.log('  ✅ Origin allowed:', isAllowed);
+        console.log('---');
+    }
+    next();
+});
+
 // Rate limiting
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutos
-    max: 100 // máximo 100 requests por IP
+    windowMs: 15 * 60 * 1000,
+    max: 100
 });
 app.use(limiter);
 
@@ -53,6 +91,45 @@ async function connectDB() {
     }
 }
 
+// Endpoint de debug para CORS
+app.get('/debug/cors', (req, res) => {
+    const currentOrigin = req.headers.origin;
+    const isAllowed = allowedOrigins.some(allowed => {
+        if (typeof allowed === 'string') {
+            return allowed === currentOrigin;
+        }
+        if (allowed instanceof RegExp) {
+            return allowed.test(currentOrigin || '');
+        }
+        return false;
+    });
+
+    res.json({
+        corsConfig: {
+            allowedOrigins: allowedOrigins.map(origin => 
+                origin instanceof RegExp ? origin.toString() : origin
+            ),
+            credentials: true
+        },
+        currentRequest: {
+            origin: currentOrigin,
+            isAllowed: isAllowed,
+            method: req.method,
+            path: req.path
+        },
+        environment: {
+            FRONTEND_URL: process.env.FRONTEND_URL,
+            NODE_ENV: process.env.NODE_ENV,
+            PORT: PORT
+        },
+        headers: {
+            origin: req.headers.origin,
+            referer: req.headers.referer,
+            userAgent: req.headers['user-agent']
+        }
+    });
+});
+
 // Health check
 app.get('/health', async (req, res) => {
     try {
@@ -64,6 +141,7 @@ app.get('/health', async (req, res) => {
             environment: process.env.NODE_ENV || 'development',
             platform: 'Render',
             port: PORT,
+            corsEnabled: true,
             timestamp: new Date().toISOString()
         });
     } catch (error) {
@@ -83,12 +161,13 @@ app.get('/', (req, res) => {
         endpoints: {
             health: '/health',
             skills: '/api/skills',
-            api: '/api'
+            api: '/api',
+            debugCors: '/debug/cors'
         }
     });
 });
 
-// GET /api/skills - Obtener todas las skills
+// GET /api/skills
 app.get('/api/skills', async (req, res) => {
     try {
         const { category, sort = 'proficiency', order = 'desc' } = req.query;
@@ -159,7 +238,7 @@ app.get('/api/skills/category/:category', async (req, res) => {
     }
 });
 
-// Ruta de información de API
+// API info
 app.get('/api', (req, res) => {
     res.json({
         success: true,
@@ -167,13 +246,14 @@ app.get('/api', (req, res) => {
         endpoints: {
             skills: '/api/skills',
             skillsByCategory: '/api/skills/category/:category',
-            health: '/health'
+            health: '/health',
+            debugCors: '/debug/cors'
         },
         platform: 'Render'
     });
 });
 
-// Manejo de rutas no encontradas
+// 404 handler
 app.use('*', (req, res) => {
     res.status(404).json({
         success: false,
@@ -189,8 +269,9 @@ async function startServer() {
         
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`🎨 Servidor Render corriendo en puerto ${PORT}`);
-            console.log(`📋 Health check: http://localhost:${PORT}/health`);
-            console.log(`🎯 API Skills: http://localhost:${PORT}/api/skills`);
+            console.log(`📋 Health: http://localhost:${PORT}/health`);
+            console.log(`🎯 Skills: http://localhost:${PORT}/api/skills`);
+            console.log(`🔍 Debug CORS: http://localhost:${PORT}/debug/cors`);
             console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
         });
     } catch (error) {
