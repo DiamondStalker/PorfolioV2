@@ -23,11 +23,13 @@ jobs:
     - name: Install dependencies 🔧
       run: npm ci
 
-    - name: Information Enviroment ✨
+    - name: Debug vars/secrets presence ✨
       run: |
-        echo "VAR1=${{ vars.Test }}"
-        echo "VAR2=${{ vars.RENDER_API_URL }}"
-        echo "VAR2=${{ secrets.GH_TOKEN }}"
+        echo "Test present? => ${{ vars.Test != '' }}"
+        echo "RENDER_API_URL present? => ${{ vars.RENDER_API_URL != '' }}"
+        echo "GH_TOKEN present? => ${{ secrets.GH_TOKEN != '' }}"
+        echo "GITHUB_TOKEN present? => ${{ secrets.GITHUB_TOKEN != '' }}"
+
       
     - name: Build for production 🏗️
       run: npm run build
