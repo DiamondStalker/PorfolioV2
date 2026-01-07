@@ -24,7 +24,7 @@ jobs:
       run: npm ci
 
     - name: Information Enviroment ✨
-      run: echo "Enviroments \n Secrets {{secrets.RENDER_API_URL}} || Enviroment ${{ vars.RENDER_API_URL }} "
+      run: echo "Enviroments \n Secrets ${{secrets.RENDER_API_URL}} || Enviroment ${{ vars.RENDER_API_URL }}  || ${{RENDER_API_URL}}"
       
     - name: Build for production 🏗️
       run: npm run build
