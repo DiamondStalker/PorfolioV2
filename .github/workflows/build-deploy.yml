@@ -16,6 +16,8 @@ jobs:
       - name: Install & build
         run: npm i && npm run build
 
+      - name: Information
+        run: echo "validation ✨✨ ==> {{ENV.GH_TOKEN}}"
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
